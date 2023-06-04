@@ -1,5 +1,6 @@
-# +
-# Path to the .tar file
+# Unpacks the default data and annotation files downloaded from http://vision.stanford.edu/aditya86/ImageNetDogs/
+
+# Folder to be created
 folder_name = 'data'
 
 tar_annot_path = 'annotation.tar'
