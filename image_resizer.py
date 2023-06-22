@@ -2,7 +2,7 @@ import pickle
 import numpy as np
 import glob
 from PIL import Image
-from breed_helpers import get_dog_breed
+from breed_helpers import get_dog_breed, breed_to_idx
 
 shuffle = True
 desired_width = 299 # Saw 299 on someone else project, no reason to stick to this number
@@ -31,12 +31,12 @@ for image_path in dog_paths:
     arr = np.asarray(image.resize((desired_width, desired_height)))
     im_list.append(arr)
     if(len(im_list) % mod_size == 1):
-        counter += 1
         print(f'checkin {counter}/{int(len(dog_paths)/mod_size)}')
+        counter += 1
 
 images = np.stack(im_list, axis=0)
 
-data = {'X': images, 'y': breeds}
+data = {'X': images, 'y': [breed_to_idx[i] for i in breeds]}
 
 mode, size = 'shuffled_' if shuffle else '', desired_width
 with open(f'data/{mode}brute_resized_{size}_images.pickle', 'wb') as file:
