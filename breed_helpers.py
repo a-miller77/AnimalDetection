@@ -121,6 +121,7 @@ def crop_image(image: Image, bbox: tuple, size = 299, verbose = 0) -> Image:
 
 
 
+# +
 # def create_cropped():
 #     #plt.figure(figsize=(10,6))
 #     for i in range(len(dog_image_paths)):

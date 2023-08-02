@@ -10,8 +10,14 @@ desired_width = 299 # 299 is the size of the Xception network
 desired_height = 299
 
 
+# +
 dog_paths = np.array(glob.glob('data/Images/*/*'))
 annotations = np.array(glob.glob('data/Annotation/*/*'))
+
+if(get_image_path(annotations[0]) != dog_paths[0]):
+    dog_paths = [get_image_path(x) for x in annotations]
+    assert get_image_path(annotations[0]) == dog_paths[0]
+# -
 
 if(shuffle):
     indices = np.arange(len(dog_paths))  # Create an array of indices
@@ -20,9 +26,12 @@ if(shuffle):
     dog_paths = np.array(dog_paths)[indices]  # Shuffle dog paths based on indices
     annotations = np.array(annotations)[indices] # Shuffle annotations based on indices
 
-breeds = [get_dog_breed(x) for x in annotations] # generate a list of breeds
+# +
+#breeds = [get_dog_breed(x) for x in annotations] # generate a list of breeds
+# -
 
 im_list = list()
+breeds = list()
 counter = 1
 mod_size = 1000 #update frequency on the length of the process, set to 1 to disable
 
@@ -37,9 +46,10 @@ for i, image_path in enumerate(dog_paths):
         image = crop_image(get_image(image_path), bbox, size = desired_width)
         arr = np.asarray(image.convert('RGB'))
         im_list.append(arr)
+        breeds.append(get_dog_breed(annotations[i]))
 
     if(len(im_list) % mod_size == 1):
-        print(f'checkin {counter}/{int(len(dog_paths)/mod_size)+2}')
+        print(f'checkin {counter}/{int(len(dog_paths)/mod_size)+1}')
         counter += 1
 
 
@@ -50,3 +60,5 @@ data = {'X': images, 'y': [breed_to_idx[i] for i in breeds]}
 shuffled, mode, size = 'shuffled_' if shuffle else '', 'smart_' if smart else 'brute_', desired_width
 with open(f'data/{shuffled}{mode}resized_{size}_images.pickle', 'wb') as file:
     pickle.dump(data, file)
+
+
