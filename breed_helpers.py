@@ -43,6 +43,9 @@ def get_dog_breed(annot):
     file = annot.replace('\\','/').split('/')
     return file[-2].split('-', 1)[-1]
 
+def str_to_tuple(str: str) -> tuple:
+    return tuple([int(x) for x in str[1:-1].replace(' ', '').split(',')])
+
 def crop_image(image: Image, bbox: tuple, size = 299, verbose = 0) -> Image:
     xmin, ymin, xmax, ymax = bbox #unpack bbox
     im_width, im_height = image.size #image width and height
